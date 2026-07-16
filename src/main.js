@@ -1,21 +1,16 @@
-import html2canvas from 'html2canvas';
 import './style.css';
 
 const scene = document.querySelector('#winter-scene');
 const canvas = document.querySelector('#snow-canvas');
 const context = canvas.getContext('2d');
-const orbit = document.querySelector('#wind-orbit');
 const snowLevelButton = document.querySelector('#snow-level');
 const snowLevelLabel = document.querySelector('#snow-level-label');
-const captureButton = document.querySelector('#capture-button');
-const captureLabel = document.querySelector('#capture-label');
-const captureFlash = document.querySelector('#capture-flash');
 const toast = document.querySelector('#toast');
 
 const levels = [
   { name: '舒缓', density: 0.62 },
   { name: '漫天', density: 1 },
-  { name: '暴雪', density: 1.48 }
+  { name: '暴雪', density: 2.35 }
 ];
 
 let width = 1;
@@ -66,18 +61,19 @@ class Snowflake {
     const dx = this.x - pointer.x;
     const dy = this.y - pointer.y;
     const distance = Math.hypot(dx, dy);
-    const windRadius = 175;
+    const pointerSpeed = Math.min(1600, Math.hypot(pointer.velocityX, pointer.velocityY));
+    const speedRatio = pointerSpeed / 1600;
+    const windRadius = 165 + speedRatio * 210;
 
     if (pointer.active && distance < windRadius) {
-      const influence = Math.pow(1 - distance / windRadius, 1.7);
-      const pointerSpeed = Math.min(950, Math.hypot(pointer.velocityX, pointer.velocityY));
-      const windScale = 0.3 + pointerSpeed / 780;
+      const influence = Math.pow(1 - distance / windRadius, 1.45);
+      const windScale = 0.72 + Math.pow(speedRatio, 1.3) * 7.2;
       this.velocityX += pointer.velocityX * influence * windScale * delta;
       this.velocityY += pointer.velocityY * influence * windScale * delta;
 
       if (distance > 1) {
         const swirlDirection = pointer.velocityX >= 0 ? 1 : -1;
-        const swirl = 90 * influence * swirlDirection * delta;
+        const swirl = (110 + speedRatio * 430) * influence * swirlDirection * delta;
         this.velocityX += (-dy / distance) * swirl;
         this.velocityY += (dx / distance) * swirl;
       }
@@ -99,8 +95,8 @@ class Snowflake {
     const drag = Math.pow(0.1, delta);
     this.velocityX *= drag;
     this.velocityY *= drag;
-    this.velocityX = clamp(this.velocityX, -260, 260);
-    this.velocityY = clamp(this.velocityY, -190, 210);
+    this.velocityX = clamp(this.velocityX, -430, 430);
+    this.velocityY = clamp(this.velocityY, -320, 350);
 
     this.x += (this.drift + Math.sin(elapsed * 0.00045 + this.phase) * (4 + this.depth * 9) + this.velocityX) * delta;
     this.y += (this.speed + this.velocityY) * delta;
@@ -145,7 +141,7 @@ class Snowflake {
 
 function desiredFlakeCount() {
   const areaCount = Math.round((width * height) / 4600);
-  return Math.round(clamp(areaCount, 150, 360) * levels[levelIndex].density);
+  return Math.min(780, Math.round(clamp(areaCount, 150, 360) * levels[levelIndex].density));
 }
 
 function syncFlakeCount() {
@@ -223,8 +219,6 @@ function updatePointer(event) {
   pointer.y = nextY;
   pointer.active = true;
   pointer.lastMove = now;
-  orbit.style.transform = `translate3d(${nextX}px, ${nextY}px, 0) scale(1)`;
-  scene.classList.add('has-pointer');
 }
 
 function showToast(message) {
@@ -237,7 +231,6 @@ function showToast(message) {
 scene.addEventListener('pointermove', updatePointer);
 scene.addEventListener('pointerleave', () => {
   pointer.active = false;
-  scene.classList.remove('has-pointer');
 });
 
 scene.addEventListener('pointerdown', (event) => {
@@ -257,37 +250,6 @@ snowLevelButton.addEventListener('click', () => {
   snowLevelLabel.textContent = levels[levelIndex].name;
   syncFlakeCount();
   showToast(`雪量已切换为「${levels[levelIndex].name}」`);
-});
-
-captureButton.addEventListener('click', async () => {
-  captureButton.disabled = true;
-  captureLabel.textContent = '正在保存…';
-
-  try {
-    const snapshot = await html2canvas(scene, {
-      backgroundColor: '#06111f',
-      useCORS: true,
-      logging: false,
-      scale: Math.min(window.devicePixelRatio || 1, 2),
-      ignoreElements: (element) => element.dataset?.captureIgnore === 'true'
-    });
-
-    const link = document.createElement('a');
-    link.download = `winter-wind-${new Date().toISOString().slice(0, 10)}.png`;
-    link.href = snapshot.toDataURL('image/png');
-    link.click();
-
-    captureFlash.classList.remove('is-active');
-    void captureFlash.offsetWidth;
-    captureFlash.classList.add('is-active');
-    showToast('这一刻已经保存为 PNG');
-  } catch (error) {
-    console.error(error);
-    showToast('保存失败，请稍后再试');
-  } finally {
-    captureButton.disabled = false;
-    captureLabel.textContent = '保存这一刻';
-  }
 });
 
 window.addEventListener('resize', resize);
