@@ -216,6 +216,14 @@ button {
   font-style: normal;
 }
 
+.scene-copy.is-resonating {
+  animation: title-resonance 680ms cubic-bezier(0.2, 0.85, 0.3, 1);
+}
+
+.scene-copy.is-resonating h1 {
+  text-shadow: 0 0 12px rgba(199, 242, 255, 0.18), 0 4px 32px rgba(0, 8, 18, 0.75);
+}
+
 .lede {
   margin: 28px 0 0;
   color: rgba(225, 244, 252, 0.7);
@@ -357,6 +365,22 @@ button {
   50% { opacity: 1; transform: translateY(7px); }
 }
 
+@keyframes title-resonance {
+  0%, 100% { transform: translateY(-42%); }
+  16% { transform: translate(-0.45px, calc(-42% + 0.35px)); }
+  28% { transform: translate(0.35px, calc(-42% - 0.3px)); }
+  42% { transform: translate(-0.2px, calc(-42% + 0.16px)); }
+  58% { transform: translate(0.1px, calc(-42% - 0.08px)); }
+}
+
+@keyframes title-resonance-mobile {
+  0%, 100% { transform: none; }
+  16% { transform: translate(-0.45px, 0.35px); }
+  28% { transform: translate(0.35px, -0.3px); }
+  42% { transform: translate(-0.2px, 0.16px); }
+  58% { transform: translate(0.1px, -0.08px); }
+}
+
 @media (max-width: 720px) {
   .topbar {
     padding: 20px;
@@ -374,6 +398,10 @@ button {
     bottom: 190px;
     left: 20px;
     transform: none;
+  }
+
+  .scene-copy.is-resonating {
+    animation-name: title-resonance-mobile;
   }
 
   .scene-copy h1 {
@@ -405,7 +433,8 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .mist,
-  .mouse-icon i {
+  .mouse-icon i,
+  .scene-copy.is-resonating {
     animation: none;
   }
 }
