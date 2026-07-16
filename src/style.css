@@ -10,13 +10,18 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  min-width: 320px;
+  background: #06111f;
+  scroll-behavior: smooth;
+}
+
 body {
   width: 100%;
   min-width: 320px;
-  height: 100%;
+  min-height: 100%;
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 button,
@@ -29,10 +34,30 @@ button {
   border: 0;
 }
 
-.winter-scene {
+.site-shell {
   position: relative;
+  min-height: 260vh;
+  background: #06111f;
+}
+
+.winter-scene {
+  --scene-shift: 0%;
+  --scene-scale: 1.02;
+  --scene-opacity: 1;
+  --mist-opacity: 0.9;
+  --mist-two-opacity: 0.5;
+  --snow-shift: 0px;
+  --snow-scale: 1;
+  --snow-opacity: 1;
+  --hero-ui-opacity: 1;
+  --hero-ui-shift: 0px;
+  --copy-shift: 0px;
+  position: sticky;
+  top: 0;
+  z-index: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  height: 100svh;
   min-height: 560px;
   overflow: hidden;
   isolation: isolate;
@@ -54,8 +79,11 @@ button {
     url('/winter-wind-snow/winter-courtyard.png');
   background-position: center;
   background-size: cover;
-  transform: scale(1.02);
+  opacity: var(--scene-opacity);
+  transform: translate3d(0, var(--scene-shift), 0) scale(var(--scene-scale));
   filter: saturate(0.86) contrast(1.06);
+  transition: opacity 80ms linear, transform 80ms linear;
+  will-change: opacity, transform;
 }
 
 .winter-scene::before {
@@ -90,6 +118,7 @@ button {
   pointer-events: none;
   background: rgba(113, 204, 241, 0.09);
   filter: blur(70px);
+  opacity: var(--mist-opacity);
   animation: mist-drift 18s ease-in-out infinite alternate;
 }
 
@@ -100,7 +129,7 @@ button {
 
 .mist-two {
   inset: auto 8% 10% auto;
-  opacity: 0.55;
+  opacity: var(--mist-two-opacity);
   animation-delay: -7s;
 }
 
@@ -109,6 +138,10 @@ button {
   width: 100%;
   height: 100%;
   touch-action: none;
+  opacity: var(--snow-opacity);
+  transform: translate3d(0, var(--snow-shift), 0) scale(var(--snow-scale));
+  transition: opacity 100ms linear, transform 100ms linear;
+  will-change: opacity, transform;
 }
 
 .topbar,
@@ -118,6 +151,9 @@ button {
   z-index: 5;
   display: flex;
   align-items: center;
+  opacity: var(--hero-ui-opacity);
+  transform: translateY(var(--hero-ui-shift));
+  transition: opacity 80ms linear, transform 80ms linear;
 }
 
 .topbar {
@@ -163,7 +199,8 @@ button {
 .weather-note,
 .eyebrow,
 .control-button small,
-.scene-footer p {
+.scene-footer p,
+.project-copy span {
   color: rgba(221, 244, 255, 0.58);
   font-size: 9px;
   letter-spacing: 0.16em;
@@ -192,9 +229,11 @@ button {
   z-index: 4;
   top: 50%;
   left: clamp(28px, 7vw, 110px);
-  transform: translateY(-42%);
+  opacity: var(--hero-ui-opacity);
+  transform: translateY(calc(-42% + var(--copy-shift)));
   pointer-events: none;
   text-shadow: 0 4px 32px rgba(0, 8, 18, 0.75);
+  transition: opacity 80ms linear, transform 80ms linear;
 }
 
 .eyebrow {
@@ -202,11 +241,15 @@ button {
   color: rgba(182, 231, 250, 0.78);
 }
 
-.scene-copy h1 {
+.scene-copy h1,
+.portfolio-intro h2 {
   margin: 0;
   font-family: "Songti SC", SimSun, serif;
-  font-size: clamp(48px, 7vw, 102px);
   font-weight: 400;
+}
+
+.scene-copy h1 {
+  font-size: clamp(48px, 7vw, 102px);
   line-height: 0.98;
   letter-spacing: -0.045em;
 }
@@ -258,12 +301,6 @@ button {
   border-color: rgba(210, 241, 253, 0.4);
   background: rgba(10, 33, 52, 0.65);
   transform: translateY(-2px);
-}
-
-.control-button:disabled {
-  cursor: wait;
-  opacity: 0.62;
-  transform: none;
 }
 
 .control-button b,
@@ -355,6 +392,148 @@ button {
   transform: translate(-50%, 0);
 }
 
+.portfolio-section {
+  position: relative;
+  z-index: 12;
+  min-height: 160vh;
+  padding: clamp(150px, 19vh, 230px) clamp(24px, 6vw, 100px) 160px;
+  background:
+    linear-gradient(180deg, rgba(4, 15, 27, 0) 0, rgba(4, 15, 27, 0.64) 13%, #06111f 31%),
+    radial-gradient(circle at 80% 10%, rgba(95, 195, 235, 0.08), transparent 26%);
+}
+
+.portfolio-intro {
+  width: min(620px, 100%);
+  margin-bottom: clamp(46px, 7vw, 86px);
+}
+
+.portfolio-intro .eyebrow {
+  margin-bottom: 18px;
+}
+
+.portfolio-intro h2 {
+  font-size: clamp(40px, 5.4vw, 78px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.portfolio-intro > p:last-child {
+  margin: 20px 0 0;
+  color: rgba(222, 243, 252, 0.56);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 28px);
+}
+
+.portfolio-card {
+  position: relative;
+  min-height: clamp(330px, 37vw, 490px);
+  overflow: hidden;
+  border: 1px solid rgba(201, 235, 250, 0.16);
+  background: #0a1a29;
+  cursor: crosshair;
+  isolation: isolate;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.2);
+}
+
+.portfolio-card::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid rgba(213, 245, 255, 0.08);
+  box-shadow: inset 0 -80px 100px rgba(0, 8, 17, 0.42);
+}
+
+.project-art {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  transform: scale(1.02);
+  transition: transform 1000ms cubic-bezier(0.16, 1, 0.3, 1), filter 600ms ease;
+}
+
+.project-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 15, 27, 0.04), rgba(3, 12, 22, 0.78));
+}
+
+.project-one .project-art {
+  background:
+    linear-gradient(135deg, rgba(62, 171, 221, 0.12), transparent 56%),
+    url('/winter-wind-snow/winter-courtyard.png') center / cover;
+}
+
+.project-two .project-art {
+  background:
+    radial-gradient(circle at 72% 24%, rgba(156, 234, 255, 0.38), transparent 8%),
+    radial-gradient(circle at 16% 86%, rgba(49, 120, 176, 0.36), transparent 35%),
+    linear-gradient(145deg, #0a2336 0%, #163d53 52%, #06111f 100%);
+}
+
+.project-three .project-art {
+  background:
+    linear-gradient(130deg, transparent 48%, rgba(164, 232, 255, 0.12) 48.2%, transparent 48.6%),
+    linear-gradient(25deg, transparent 38%, rgba(164, 232, 255, 0.1) 38.2%, transparent 38.6%),
+    radial-gradient(circle at 25% 30%, rgba(112, 194, 232, 0.25), transparent 22%),
+    linear-gradient(145deg, #071522, #102f43 58%, #07111e);
+}
+
+.project-copy {
+  position: absolute;
+  z-index: 1;
+  right: 26px;
+  bottom: 26px;
+  left: 26px;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-copy span {
+  display: block;
+  color: rgba(205, 241, 255, 0.68);
+}
+
+.project-copy h3 {
+  margin: 10px 0 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(28px, 3.1vw, 42px);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.project-copy p {
+  margin: 12px 0 0;
+  color: rgba(227, 245, 253, 0.66);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.portfolio-card:hover .project-art {
+  transform: scale(1.065);
+  filter: saturate(1.08);
+}
+
+.portfolio-card:hover .project-copy {
+  transform: translateY(-4px);
+}
+
+.snow-wipe {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 @keyframes mist-drift {
   from { transform: translate3d(-4%, -2%, 0) scale(0.95); }
   to { transform: translate3d(12%, 7%, 0) scale(1.12); }
@@ -366,22 +545,40 @@ button {
 }
 
 @keyframes title-resonance {
-  0%, 100% { transform: translateY(-42%); }
-  16% { transform: translate(-0.45px, calc(-42% + 0.35px)); }
-  28% { transform: translate(0.35px, calc(-42% - 0.3px)); }
-  42% { transform: translate(-0.2px, calc(-42% + 0.16px)); }
-  58% { transform: translate(0.1px, calc(-42% - 0.08px)); }
+  0%, 100% { transform: translateY(calc(-42% + var(--copy-shift))); }
+  16% { transform: translate(-0.45px, calc(-42% + var(--copy-shift) + 0.35px)); }
+  28% { transform: translate(0.35px, calc(-42% + var(--copy-shift) - 0.3px)); }
+  42% { transform: translate(-0.2px, calc(-42% + var(--copy-shift) + 0.16px)); }
+  58% { transform: translate(0.1px, calc(-42% + var(--copy-shift) - 0.08px)); }
 }
 
 @keyframes title-resonance-mobile {
-  0%, 100% { transform: none; }
-  16% { transform: translate(-0.45px, 0.35px); }
-  28% { transform: translate(0.35px, -0.3px); }
-  42% { transform: translate(-0.2px, 0.16px); }
-  58% { transform: translate(0.1px, -0.08px); }
+  0%, 100% { transform: translateY(var(--copy-shift)); }
+  16% { transform: translate(-0.45px, calc(var(--copy-shift) + 0.35px)); }
+  28% { transform: translate(0.35px, calc(var(--copy-shift) - 0.3px)); }
+  42% { transform: translate(-0.2px, calc(var(--copy-shift) + 0.16px)); }
+  58% { transform: translate(0.1px, calc(var(--copy-shift) - 0.08px)); }
+}
+
+@media (max-width: 920px) {
+  .portfolio-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .portfolio-card:last-child {
+    grid-column: span 2;
+  }
+
+  .portfolio-card {
+    min-height: clamp(330px, 52vw, 480px);
+  }
 }
 
 @media (max-width: 720px) {
+  .site-shell {
+    min-height: 260vh;
+  }
+
   .topbar {
     padding: 20px;
   }
@@ -397,7 +594,7 @@ button {
     right: 20px;
     bottom: 190px;
     left: 20px;
-    transform: none;
+    transform: translateY(var(--copy-shift));
   }
 
   .scene-copy.is-resonating {
@@ -429,12 +626,48 @@ button {
     bottom: 20px;
     left: 20px;
   }
+
+  .portfolio-section {
+    min-height: 200vh;
+    padding: 128px 20px 100px;
+  }
+
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-card,
+  .portfolio-card:last-child {
+    min-height: min(128vw, 500px);
+    grid-column: auto;
+  }
+
+  .project-copy {
+    right: 22px;
+    bottom: 22px;
+    left: 22px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .mist,
   .mouse-icon i,
   .scene-copy.is-resonating {
     animation: none;
+  }
+
+  .scene-image,
+  #snow-canvas,
+  .topbar,
+  .scene-footer,
+  .controls,
+  .scene-copy,
+  .project-art,
+  .project-copy {
+    transition: none;
   }
 }

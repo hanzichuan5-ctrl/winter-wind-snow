@@ -4,57 +4,99 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#06111f" />
-    <meta name="description" content="一场会回应鼠标、可以蓄力施放冰蓝霜爆的冬夜落雪。" />
+    <meta name="description" content="一场会回应鼠标，并能穿过雪幕发现作品的冬夜落雪。" />
     <title>风过雪庭 · Interactive Snow</title>
-    <script type="module" crossorigin src="/winter-wind-snow/assets/index-iNpL6gUC.js"></script>
-    <link rel="stylesheet" crossorigin href="/winter-wind-snow/assets/index-CdZvPlei.css">
+    <script type="module" crossorigin src="/winter-wind-snow/assets/index-DjdroJmt.js"></script>
+    <link rel="stylesheet" crossorigin href="/winter-wind-snow/assets/index-DBX65blI.css">
   </head>
   <body>
-    <main id="winter-scene" class="winter-scene">
-      <div class="scene-image" aria-hidden="true"></div>
-      <div class="mist mist-one" aria-hidden="true"></div>
-      <div class="mist mist-two" aria-hidden="true"></div>
-      <canvas id="snow-canvas" aria-label="随鼠标流动的雪花动画"></canvas>
+    <main class="site-shell">
+      <section id="winter-scene" class="winter-scene" aria-label="互动雪景">
+        <div class="scene-image" aria-hidden="true"></div>
+        <div class="mist mist-one" aria-hidden="true"></div>
+        <div class="mist mist-two" aria-hidden="true"></div>
+        <canvas id="snow-canvas" aria-label="随鼠标流动的雪花动画"></canvas>
 
-      <header class="topbar" data-capture-ignore="true">
-        <a class="brand" href="#" aria-label="风过雪庭首页">
-          <span class="brand-mark">雪</span>
-          <span>
-            <b>风过雪庭</b>
-            <small>WINTER WIND STUDY / 01</small>
-          </span>
-        </a>
-        <div class="weather-note">
-          <span class="weather-dot"></span>
-          <span>夜雪 · 微风</span>
-        </div>
-      </header>
+        <header class="topbar">
+          <a class="brand" href="#winter-scene" aria-label="风过雪庭首页">
+            <span class="brand-mark">雪</span>
+            <span>
+              <b>风过雪庭</b>
+              <small>WINTER WIND STUDY / 01</small>
+            </span>
+          </a>
+          <div class="weather-note">
+            <span class="weather-dot"></span>
+            <span>夜雪 · 微风</span>
+          </div>
+        </header>
 
-      <section class="scene-copy" data-capture-ignore="true">
-        <p class="eyebrow">INTERACTIVE WINTER</p>
-        <h1>让风经过<br /><i>这一场雪。</i></h1>
-        <p class="lede">移动鼠标，雪会记住风的方向。<br />按住夜空蓄力，松开施放一瞬冰蓝霜爆。</p>
+        <section class="scene-copy">
+          <p class="eyebrow">INTERACTIVE WINTER</p>
+          <h1>让风经过<br /><i>这一场雪。</i></h1>
+          <p class="lede">移动鼠标，雪会记住风的方向。<br />按住夜空蓄力，让雪缓慢荡开。</p>
+        </section>
+
+        <aside class="controls" aria-label="雪景控制">
+          <button id="snow-level" class="control-button" type="button">
+            <span class="button-symbol">✦</span>
+            <span>
+              <small>雪量</small>
+              <b id="snow-level-label">漫天</b>
+            </span>
+          </button>
+        </aside>
+
+        <footer class="scene-footer">
+          <div class="interaction-hint">
+            <span class="mouse-icon"><i></i></span>
+            <span><b>移动鼠标造风</b><small>按住蓄力，松开让雪荡开</small></span>
+          </div>
+          <p>向下滚动，穿过雪幕</p>
+        </footer>
+
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
       </section>
 
-      <aside class="controls" data-capture-ignore="true" aria-label="雪景控制">
-        <button id="snow-level" class="control-button" type="button">
-          <span class="button-symbol">✦</span>
-          <span>
-            <small>雪量</small>
-            <b id="snow-level-label">漫天</b>
-          </span>
-        </button>
-      </aside>
+      <section id="portfolio" class="portfolio-section" aria-labelledby="portfolio-title">
+        <header class="portfolio-intro">
+          <p class="eyebrow">SELECTED WORKS</p>
+          <h2 id="portfolio-title">从雪里，发现作品。</h2>
+          <p>将鼠标划过卡片，擦开落在玻璃上的雪。</p>
+        </header>
 
-      <footer class="scene-footer" data-capture-ignore="true">
-        <div class="interaction-hint">
-          <span class="mouse-icon"><i></i></span>
-          <span><b>移动鼠标造风</b><small>按住蓄力，松开霜爆</small></span>
+        <div class="portfolio-grid">
+          <article class="portfolio-card project-one" data-snow-card>
+            <div class="project-art" aria-hidden="true"></div>
+            <div class="project-copy">
+              <span>INTERACTION / 01</span>
+              <h3>风过雪庭</h3>
+              <p>可被鼠标改变方向的冬夜雪景。</p>
+            </div>
+            <canvas class="snow-wipe" aria-hidden="true"></canvas>
+          </article>
+
+          <article class="portfolio-card project-two" data-snow-card>
+            <div class="project-art" aria-hidden="true"></div>
+            <div class="project-copy">
+              <span>YOUR PROJECT / 02</span>
+              <h3>下一件作品</h3>
+              <p>在这里替换成你的项目封面与简介。</p>
+            </div>
+            <canvas class="snow-wipe" aria-hidden="true"></canvas>
+          </article>
+
+          <article class="portfolio-card project-three" data-snow-card>
+            <div class="project-art" aria-hidden="true"></div>
+            <div class="project-copy">
+              <span>YOUR PROJECT / 03</span>
+              <h3>下一段探索</h3>
+              <p>保留给你想被看见的下一件作品。</p>
+            </div>
+            <canvas class="snow-wipe" aria-hidden="true"></canvas>
+          </article>
         </div>
-        <p>CANVAS PARTICLES · VELOCITY WIND FIELD</p>
-      </footer>
-
-      <div id="toast" class="toast" data-capture-ignore="true" role="status" aria-live="polite"></div>
+      </section>
     </main>
   </body>
 </html>
