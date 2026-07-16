@@ -25,3 +25,5 @@ npm run build
 ```
 
 技术栈：原生 Canvas 2D、Vite、html2canvas。
+
+GitHub Pages 直接发布 `docs` 目录中的生产构建。

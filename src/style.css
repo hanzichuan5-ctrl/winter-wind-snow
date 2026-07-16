@@ -1,0 +1,478 @@
+:root {
+  font-family: Inter, "Noto Sans SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  color: #eaf8ff;
+  background: #06111f;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 320px;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+.winter-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #071522;
+  cursor: crosshair;
+}
+
+.scene-image,
+.mist,
+#snow-canvas,
+.capture-flash {
+  position: absolute;
+  inset: 0;
+}
+
+.scene-image {
+  z-index: -5;
+  background-image:
+    linear-gradient(180deg, rgba(2, 10, 20, 0.15), rgba(3, 16, 28, 0.18)),
+    url('/winter-wind-snow/winter-courtyard.png');
+  background-position: center;
+  background-size: cover;
+  transform: scale(1.02);
+  filter: saturate(0.86) contrast(1.06);
+}
+
+.winter-scene::before {
+  content: "";
+  position: absolute;
+  z-index: -3;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 42%, rgba(106, 208, 255, 0.1), transparent 22%),
+    linear-gradient(90deg, rgba(2, 11, 20, 0.4), transparent 45%, rgba(3, 11, 21, 0.12)),
+    linear-gradient(180deg, rgba(3, 9, 18, 0.16), transparent 50%, rgba(2, 11, 18, 0.16));
+}
+
+.winter-scene::after {
+  content: "";
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  border: 1px solid rgba(200, 239, 255, 0.1);
+  pointer-events: none;
+  box-shadow: inset 0 0 100px rgba(0, 5, 12, 0.35);
+}
+
+.mist {
+  z-index: -2;
+  width: 38vw;
+  height: 24vw;
+  min-width: 340px;
+  min-height: 220px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: rgba(113, 204, 241, 0.09);
+  filter: blur(70px);
+  animation: mist-drift 18s ease-in-out infinite alternate;
+}
+
+.mist-one {
+  top: 5%;
+  left: 4%;
+}
+
+.mist-two {
+  inset: auto 8% 10% auto;
+  opacity: 0.55;
+  animation-delay: -7s;
+}
+
+#snow-canvas {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.wind-orbit {
+  position: absolute;
+  z-index: 3;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 1px solid rgba(200, 242, 255, 0.15);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.75);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.wind-orbit::before,
+.wind-orbit::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.wind-orbit::before {
+  inset: 20px;
+  border: 1px dashed rgba(200, 242, 255, 0.12);
+}
+
+.wind-orbit::after {
+  inset: 50%;
+  width: 4px;
+  height: 4px;
+  background: #dff8ff;
+  box-shadow: 0 0 18px 5px rgba(144, 224, 255, 0.55);
+}
+
+.winter-scene.has-pointer .wind-orbit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.topbar,
+.scene-footer,
+.controls {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+}
+
+.topbar {
+  top: 0;
+  right: 0;
+  left: 0;
+  justify-content: space-between;
+  padding: 28px 34px;
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(213, 243, 255, 0.28);
+  color: #dff7ff;
+  background: rgba(5, 21, 35, 0.28);
+  font-family: serif;
+  font-size: 17px;
+  backdrop-filter: blur(12px);
+}
+
+.brand b,
+.brand small {
+  display: block;
+}
+
+.brand b {
+  font-family: serif;
+  font-size: 17px;
+  letter-spacing: 0.16em;
+}
+
+.brand small,
+.weather-note,
+.eyebrow,
+.control-button small,
+.scene-footer p {
+  color: rgba(221, 244, 255, 0.58);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
+.weather-note {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px;
+  border: 1px solid rgba(208, 239, 251, 0.12);
+  background: rgba(4, 16, 29, 0.28);
+  backdrop-filter: blur(12px);
+}
+
+.weather-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9be5ff;
+  box-shadow: 0 0 12px rgba(120, 221, 255, 0.75);
+}
+
+.scene-copy {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: clamp(28px, 7vw, 110px);
+  transform: translateY(-42%);
+  pointer-events: none;
+  text-shadow: 0 4px 32px rgba(0, 8, 18, 0.75);
+}
+
+.eyebrow {
+  margin: 0 0 20px;
+  color: rgba(182, 231, 250, 0.78);
+}
+
+.scene-copy h1 {
+  margin: 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(48px, 7vw, 102px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.scene-copy h1 i {
+  color: #bcecff;
+  font-style: normal;
+}
+
+.lede {
+  margin: 28px 0 0;
+  color: rgba(225, 244, 252, 0.7);
+  font-size: 13px;
+  line-height: 1.9;
+  letter-spacing: 0.08em;
+}
+
+.controls {
+  right: 34px;
+  bottom: 86px;
+  gap: 10px;
+}
+
+.control-button {
+  display: flex;
+  min-width: 154px;
+  min-height: 58px;
+  padding: 0 18px;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(210, 241, 253, 0.18);
+  color: #eafaff;
+  background: rgba(5, 17, 30, 0.48);
+  cursor: pointer;
+  text-align: left;
+  backdrop-filter: blur(16px);
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.control-button:hover {
+  border-color: rgba(210, 241, 253, 0.4);
+  background: rgba(10, 33, 52, 0.65);
+  transform: translateY(-2px);
+}
+
+.control-button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+  transform: none;
+}
+
+.control-button.primary {
+  color: #071a28;
+  background: rgba(206, 241, 253, 0.9);
+  border-color: transparent;
+}
+
+.control-button.primary small {
+  color: rgba(7, 26, 40, 0.58);
+}
+
+.control-button b,
+.control-button small {
+  display: block;
+}
+
+.control-button b {
+  margin-top: 3px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.button-symbol {
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.scene-footer {
+  right: 34px;
+  bottom: 25px;
+  left: 34px;
+  justify-content: space-between;
+}
+
+.interaction-hint {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+}
+
+.interaction-hint b,
+.interaction-hint small {
+  display: block;
+}
+
+.interaction-hint b {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.interaction-hint small {
+  margin-top: 3px;
+  color: rgba(221, 244, 255, 0.46);
+  font-size: 9px;
+}
+
+.mouse-icon {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 32px;
+  border: 1px solid rgba(217, 244, 255, 0.4);
+  border-radius: 12px;
+}
+
+.mouse-icon i {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 2px;
+  height: 5px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: #c7f0ff;
+  animation: mouse-wheel 1.8s ease-in-out infinite;
+}
+
+.toast {
+  position: absolute;
+  z-index: 8;
+  bottom: 28px;
+  left: 50%;
+  padding: 10px 16px;
+  border: 1px solid rgba(211, 242, 255, 0.2);
+  color: #e8f8ff;
+  background: rgba(4, 17, 29, 0.78);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+  backdrop-filter: blur(16px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.capture-flash {
+  z-index: 7;
+  pointer-events: none;
+  background: #dff7ff;
+  opacity: 0;
+}
+
+.capture-flash.is-active {
+  animation: capture-flash 480ms ease-out;
+}
+
+@keyframes mist-drift {
+  from { transform: translate3d(-4%, -2%, 0) scale(0.95); }
+  to { transform: translate3d(12%, 7%, 0) scale(1.12); }
+}
+
+@keyframes mouse-wheel {
+  0%, 100% { opacity: 0.35; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(7px); }
+}
+
+@keyframes capture-flash {
+  0% { opacity: 0; }
+  18% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    padding: 20px;
+  }
+
+  .weather-note,
+  .scene-footer p,
+  .lede br {
+    display: none;
+  }
+
+  .scene-copy {
+    top: auto;
+    right: 20px;
+    bottom: 190px;
+    left: 20px;
+    transform: none;
+  }
+
+  .scene-copy h1 {
+    font-size: clamp(46px, 15vw, 72px);
+  }
+
+  .lede {
+    max-width: 320px;
+    margin-top: 20px;
+  }
+
+  .controls {
+    right: 20px;
+    bottom: 76px;
+    left: 20px;
+  }
+
+  .control-button {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .scene-footer {
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mist,
+  .mouse-icon i {
+    animation: none;
+  }
+}
